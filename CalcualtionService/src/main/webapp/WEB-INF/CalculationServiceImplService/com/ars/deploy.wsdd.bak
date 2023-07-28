@@ -1,0 +1,40 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from CalculationServiceImplService WSDL service -->
+
+  <service name="CalculationServiceImpl" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://ars.com"/>
+      <parameter name="wsdlServiceElement" value="CalculationServiceImplService"/>
+      <parameter name="schemaQualified" value="http://ars.com"/>
+      <parameter name="wsdlServicePort" value="CalculationServiceImpl"/>
+      <parameter name="className" value="com.ars.CalculationServiceImplSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="CalculationServiceImpl"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="sum" qname="operNS:sum" xmlns:operNS="http://ars.com" returnQName="retNS:sumReturn" xmlns:retNS="http://ars.com" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:op" xmlns:pns="http://ars.com" type="tns:Operand" xmlns:tns="http://ars.com"/>
+      </operation>
+      <operation name="multiplication" qname="operNS:multiplication" xmlns:operNS="http://ars.com" returnQName="retNS:multiplicationReturn" xmlns:retNS="http://ars.com" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:op" xmlns:pns="http://ars.com" type="tns:Operand" xmlns:tns="http://ars.com"/>
+      </operation>
+      <parameter name="allowedMethods" value="sum multiplication"/>
+
+      <typeMapping
+        xmlns:ns="http://ars.com"
+        qname="ns:Operand"
+        type="java:com.ars.Operand"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
